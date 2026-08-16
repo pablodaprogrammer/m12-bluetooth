@@ -1,19 +1,473 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>M12 Test</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>E-MO M12 Control</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background: #101217;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 92%;
+    max-width: 600px;
+
+    background: #1b1f27;
+
+    border-radius: 20px;
+
+    padding: 25px;
+
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+h1 {
+    text-align: center;
+    margin: 0;
+}
+
+.subtitle {
+    text-align: center;
+
+    color: #888;
+
+    margin-top: 8px;
+    margin-bottom: 25px;
+}
+
+
+/* Verbindung */
+
+.connection {
+    background: #11151b;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    margin-bottom: 20px;
+}
+
+.connection-status {
+    text-align: center;
+
+    margin-bottom: 10px;
+
+    color: #aaa;
+}
+
+
+/* Buttons */
+
+button {
+    width: 100%;
+
+    padding: 14px;
+
+    margin-top: 8px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background: #287cff;
+
+    color: white;
+}
+
+button:hover {
+    background: #1768e5;
+}
+
+
+/* Modes */
+
+.modes-title {
+    margin-top: 25px;
+
+    margin-bottom: 12px;
+
+    font-size: 20px;
+
+    font-weight: bold;
+}
+
+.mode {
+    background: #11151b;
+
+    border-radius: 15px;
+
+    padding: 18px;
+
+    margin-bottom: 12px;
+}
+
+.mode-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+.mode-name {
+    font-size: 18px;
+
+    font-weight: bold;
+}
+
+.speed-value {
+    font-size: 20px;
+
+    font-weight: bold;
+
+    color: #4d8dff;
+}
+
+input[type="range"] {
+    width: 100%;
+
+    cursor: pointer;
+}
+
+.range-info {
+    display: flex;
+
+    justify-content: space-between;
+
+    color: #777;
+
+    font-size: 12px;
+
+    margin-top: 6px;
+}
+
+
+/* Status */
+
+.status {
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #11151b;
+
+    color: #aaa;
+
+    line-height: 1.5;
+}
+
+
+/* Warnung */
+
+.warning {
+    margin-top: 20px;
+
+    padding: 15px;
+
+    border-radius: 12px;
+
+    background: #302712;
+
+    color: #e8d39b;
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <h1>🛴 E-MO M12</h1>
 
-  <p>Meine Website funktioniert! ✅</p>
+<div class="container">
 
-  <button onclick="alert('Hallo!')">
-    Test
-  </button>
+
+<h1>🛴 E-MO M12</h1>
+
+<div class="subtitle">
+    Control Panel
+</div>
+
+
+<!-- Verbindung -->
+
+<div class="connection">
+
+    <div class="connection-status">
+        🔴 Scooter nicht verbunden
+    </div>
+
+    <button onclick="connectScooter()">
+        🔵 Bluetooth verbinden
+    </button>
+
+</div>
+
+
+<!-- Modes -->
+
+<div class="modes-title">
+    ⚙️ Fahrmodi
+</div>
+
+
+<!-- MODE 1 -->
+
+<div class="mode">
+
+    <div class="mode-header">
+
+        <div class="mode-name">
+            Mode 1
+        </div>
+
+        <div
+            class="speed-value"
+            id="speed1"
+        >
+            10 km/h
+        </div>
+
+    </div>
+
+
+    <input
+        type="range"
+        min="1"
+        max="20"
+        value="10"
+        id="mode1"
+    >
+
+
+    <div class="range-info">
+
+        <span>
+            1 km/h
+        </span>
+
+        <span>
+            20 km/h
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- MODE 2 -->
+
+<div class="mode">
+
+    <div class="mode-header">
+
+        <div class="mode-name">
+            Mode 2
+        </div>
+
+        <div
+            class="speed-value"
+            id="speed2"
+        >
+            15 km/h
+        </div>
+
+    </div>
+
+
+    <input
+        type="range"
+        min="1"
+        max="20"
+        value="15"
+        id="mode2"
+    >
+
+
+    <div class="range-info">
+
+        <span>
+            1 km/h
+        </span>
+
+        <span>
+            20 km/h
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- MODE 3 -->
+
+<div class="mode">
+
+    <div class="mode-header">
+
+        <div class="mode-name">
+            Mode 3
+        </div>
+
+        <div
+            class="speed-value"
+            id="speed3"
+        >
+            20 km/h
+        </div>
+
+    </div>
+
+
+    <input
+        type="range"
+        min="1"
+        max="20"
+        value="20"
+        id="mode3"
+    >
+
+
+    <div class="range-info">
+
+        <span>
+            1 km/h
+        </span>
+
+        <span>
+            20 km/h
+        </span>
+
+    </div>
+
+</div>
+
+
+<!-- Status -->
+
+<div
+    class="status"
+    id="status"
+>
+
+    Bereit.
+
+    Die Regler verändern momentan
+    nur die Anzeige.
+
+</div>
+
+
+<div class="warning">
+
+    ⚠️ Diese Version verändert noch
+    keine Einstellungen am Scooter.
+
+    <br><br>
+
+    Die Bluetooth-Verbindung und das
+    tatsächliche Übertragen der
+    unterstützten Einstellungen
+    kommen erst danach.
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* MODE 1 */
+
+document
+.getElementById("mode1")
+.addEventListener("input", function() {
+
+    document
+    .getElementById("speed1")
+    .textContent =
+        this.value + " km/h";
+
+});
+
+
+/* MODE 2 */
+
+document
+.getElementById("mode2")
+.addEventListener("input", function() {
+
+    document
+    .getElementById("speed2")
+    .textContent =
+        this.value + " km/h";
+
+});
+
+
+/* MODE 3 */
+
+document
+.getElementById("mode3")
+.addEventListener("input", function() {
+
+    document
+    .getElementById("speed3")
+    .textContent =
+        this.value + " km/h";
+
+});
+
+
+/* Bluetooth */
+
+function connectScooter() {
+
+    document
+    .getElementById("status")
+    .textContent =
+        "🔵 Bluetooth-Test wird als nächster Schritt eingerichtet.";
+
+}
+
+</script>
+
 
 </body>
+
 </html>
