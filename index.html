@@ -1,111 +1,201 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Escooter BLE Test</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<style>
+    <title>Escooter Control</title>
 
-body {
-    margin: 0;
-    min-height: 100vh;
+    <style>
 
-    font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
+        }
 
-    background: #101217;
-    color: white;
+        body {
+            margin: 0;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+            min-height: 100vh;
 
-.container {
-    width: 92%;
-    max-width: 650px;
+            font-family: Arial, sans-serif;
 
-    background: #1b1f27;
+            background: #101217;
 
-    border-radius: 20px;
+            color: white;
 
-    padding: 25px;
+            display: flex;
 
-    box-shadow: 0 10px 40px rgba(0,0,0,.5);
-}
+            justify-content: center;
 
-h1 {
-    text-align: center;
-}
+            align-items: center;
+        }
 
-.status {
-    background: #11151b;
+        .container {
+            width: 92%;
 
-    padding: 15px;
+            max-width: 550px;
 
-    border-radius: 12px;
+            background: #1b1f27;
 
-    margin: 20px 0;
+            padding: 25px;
 
-    white-space: pre-wrap;
+            border-radius: 22px;
 
-    word-break: break-word;
-}
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.5);
+        }
 
-button {
-    width: 100%;
+        h1 {
+            text-align: center;
 
-    padding: 15px;
+            margin-top: 0;
 
-    margin-top: 10px;
+            margin-bottom: 5px;
+        }
 
-    border: 0;
+        .subtitle {
+            text-align: center;
 
-    border-radius: 12px;
+            color: #888;
 
-    background: #287cff;
+            margin-bottom: 25px;
+        }
 
-    color: white;
+        .card {
+            background: #11151b;
 
-    font-size: 16px;
+            padding: 20px;
 
-    font-weight: bold;
-}
+            border-radius: 16px;
 
-button:disabled {
-    opacity: .5;
-}
+            margin-top: 15px;
+        }
 
-.service {
-    background: #11151b;
+        .status {
+            text-align: center;
 
-    border-radius: 12px;
+            color: #aaa;
 
-    padding: 15px;
+            line-height: 1.5;
 
-    margin-top: 12px;
-}
+            white-space: pre-wrap;
 
-.characteristic {
-    padding: 10px 0;
+            word-break: break-word;
+        }
 
-    color: #bbb;
+        .speed {
+            text-align: center;
 
-    font-size: 14px;
+            font-size: 65px;
 
-    border-top: 1px solid #292e36;
-}
+            font-weight: bold;
 
-.uuid {
-    font-family: monospace;
+            color: #4d8dff;
 
-    color: #6fa1ff;
+            margin: 15px 0;
+        }
 
-    word-break: break-all;
-}
+        .unit {
+            text-align: center;
 
-</style>
+            color: #888;
+
+            margin-top: -15px;
+
+            margin-bottom: 25px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+
+            height: 35px;
+
+            cursor: pointer;
+        }
+
+        .range-labels {
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+        button {
+            width: 100%;
+
+            border: none;
+
+            border-radius: 13px;
+
+            padding: 15px;
+
+            margin-top: 12px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            color: white;
+
+            background: #287cff;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1768e5;
+        }
+
+        button:disabled {
+            opacity: 0.45;
+
+            cursor: not-allowed;
+        }
+
+        .disconnect {
+            background: #343943;
+        }
+
+        .message {
+            margin-top: 15px;
+
+            padding: 15px;
+
+            background: #11151b;
+
+            border-radius: 12px;
+
+            color: #aaa;
+
+            line-height: 1.5;
+        }
+
+        .warning {
+            margin-top: 15px;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            background: #302712;
+
+            color: #e8d39b;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+    </style>
+
 </head>
 
 
@@ -115,39 +205,121 @@ button:disabled {
 <div class="container">
 
 
-<h1>
-🛴 Escooter BLE Test
-</h1>
+    <h1>🛴 Escooter</h1>
+
+    <div class="subtitle">
+        Bluetooth Control
+    </div>
 
 
-<button id="connect">
+    <!-- Bluetooth -->
 
-🔵 Bluetooth verbinden
+    <div class="card">
 
-</button>
-
-
-<button
-id="disconnect"
-disabled>
-
-🔌 Trennen
-
-</button>
+        <div
+            id="connectionStatus"
+            class="status"
+        >
+            🔴 Nicht verbunden
+        </div>
 
 
-<div
-id="status"
-class="status">
-
-Bereit.
-
-Drücke „Bluetooth verbinden“.
-
-</div>
+        <button
+            id="connectButton"
+        >
+            🔵 Bluetooth verbinden
+        </button>
 
 
-<div id="services"></div>
+        <button
+            id="disconnectButton"
+            class="disconnect"
+            disabled
+        >
+            🔌 Trennen
+        </button>
+
+    </div>
+
+
+    <!-- Geschwindigkeit -->
+
+    <div class="card">
+
+        <div class="status">
+            Gewünschte Geschwindigkeit
+        </div>
+
+
+        <div
+            id="speedDisplay"
+            class="speed"
+        >
+            20
+        </div>
+
+
+        <div class="unit">
+            km/h
+        </div>
+
+
+        <input
+            id="speedSlider"
+            type="range"
+            min="1"
+            max="20"
+            value="20"
+            step="1"
+        >
+
+
+        <div class="range-labels">
+
+            <span>
+                1 km/h
+            </span>
+
+            <span>
+                20 km/h
+            </span>
+
+        </div>
+
+
+        <button
+            id="applyButton"
+            disabled
+        >
+            ✓ Übernehmen
+        </button>
+
+
+        <div
+            id="message"
+            class="message"
+        >
+            Verbinde zuerst den Scooter.
+        </div>
+
+    </div>
+
+
+    <div class="warning">
+
+        ⚠️ Der „Übernehmen“-Button ist in dieser
+        Version noch nicht mit dem Controller
+        verbunden.
+
+        <br><br>
+
+        Die Website kennt zwar den BLE-Kanal
+        des Scooters, aber noch nicht das
+        Befehlsformat. Deshalb werden keine
+        unbekannten Daten an den Controller
+        gesendet.
+
+    </div>
 
 
 </div>
@@ -157,348 +329,360 @@ Drücke „Bluetooth verbinden“.
 <script>
 
 
-let device = null;
-
-let server = null;
+/* =========================================
+   ELEMENTE
+========================================= */
 
 
 const connectButton =
-document.getElementById("connect");
+    document.getElementById(
+        "connectButton"
+    );
 
 
 const disconnectButton =
-document.getElementById("disconnect");
+    document.getElementById(
+        "disconnectButton"
+    );
 
 
-const status =
-document.getElementById("status");
+const applyButton =
+    document.getElementById(
+        "applyButton"
+    );
 
 
-const services =
-document.getElementById("services");
+const speedSlider =
+    document.getElementById(
+        "speedSlider"
+    );
+
+
+const speedDisplay =
+    document.getElementById(
+        "speedDisplay"
+    );
+
+
+const connectionStatus =
+    document.getElementById(
+        "connectionStatus"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
 
 
 
-function setStatus(text) {
+/* =========================================
+   BLUETOOTH VARIABLEN
+========================================= */
 
-    status.textContent = text;
+
+let bluetoothDevice = null;
+
+let gattServer = null;
+
+
+
+/*
+   Die bekannte Write-Characteristic
+   des Allegro Tour.
+
+   Wir verwenden sie momentan NICHT
+   zum Schreiben.
+*/
+
+
+const WRITE_CHARACTERISTIC_UUID =
+    "f000fcc5-0451-4000-b000-000000000000";
+
+
+
+/* =========================================
+   SLIDER
+========================================= */
+
+
+speedSlider.addEventListener(
+    "input",
+    function() {
+
+        speedDisplay.textContent =
+            speedSlider.value;
+
+        message.textContent =
+            "Ausgewählt: " +
+            speedSlider.value +
+            " km/h";
+
+    }
+);
+
+
+
+/* =========================================
+   BLUETOOTH VERBINDEN
+========================================= */
+
+
+connectButton.addEventListener(
+    "click",
+    async function() {
+
+        try {
+
+            if (!navigator.bluetooth) {
+
+                throw new Error(
+                    "Web Bluetooth wird von diesem Browser nicht unterstützt."
+                );
+
+            }
+
+
+            connectionStatus.textContent =
+                "🟡 Suche nach Bluetooth-Geräten...";
+
+
+            message.textContent =
+                "Bitte wähle „Escooter“ aus.";
+
+
+            /*
+               Wir verwenden acceptAllDevices,
+               weil das bei deinem Scooter
+               bereits funktioniert hat.
+            */
+
+
+            bluetoothDevice =
+                await navigator.bluetooth.requestDevice({
+
+                    acceptAllDevices: true,
+
+                    /*
+                       Der bekannte Service muss
+                       als optionalService angegeben
+                       werden, damit wir später darauf
+                       zugreifen dürfen.
+
+                       Die UUID des Unknown Service
+                       muss hier eingesetzt werden,
+                       wenn du sie hast.
+                    */
+
+                    optionalServices: [
+                        "0000fcc0-0000-1000-8000-00805f9b34fb"
+                    ]
+
+                });
+
+
+            connectionStatus.textContent =
+                "🟡 Gerät ausgewählt";
+
+
+            message.textContent =
+                "Gerät:\n" +
+
+                (
+                    bluetoothDevice.name ||
+                    "Unbekannt"
+                ) +
+
+                "\n\nVerbinde...";
+
+
+            bluetoothDevice.addEventListener(
+                "gattserverdisconnected",
+                onDisconnected
+            );
+
+
+            if (!bluetoothDevice.gatt) {
+
+                throw new Error(
+                    "GATT wird von diesem Gerät nicht unterstützt."
+                );
+
+            }
+
+
+            gattServer =
+                await bluetoothDevice.gatt.connect();
+
+
+            connectionStatus.textContent =
+                "🟢 Verbunden";
+
+
+            connectionStatus.style.color =
+                "#55d66b";
+
+
+            connectButton.disabled =
+                true;
+
+
+            disconnectButton.disabled =
+                false;
+
+
+            applyButton.disabled =
+                false;
+
+
+            message.textContent =
+                "✅ Scooter verbunden.\n\n" +
+
+                "Ausgewählt: " +
+                speedSlider.value +
+                " km/h";
+
+
+        }
+
+        catch(error) {
+
+            console.error(error);
+
+
+            connectionStatus.textContent =
+                "🔴 Nicht verbunden";
+
+
+            connectionStatus.style.color =
+                "white";
+
+
+            connectButton.disabled =
+                false;
+
+
+            applyButton.disabled =
+                true;
+
+
+            message.textContent =
+                "❌ Bluetooth-Fehler:\n\n" +
+                error.message;
+
+        }
+
+    }
+);
+
+
+
+/* =========================================
+   TRENNEN
+========================================= */
+
+
+disconnectButton.addEventListener(
+    "click",
+    function() {
+
+        if (
+
+            bluetoothDevice &&
+
+            bluetoothDevice.gatt &&
+
+            bluetoothDevice.gatt.connected
+
+        ) {
+
+            bluetoothDevice.gatt.disconnect();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================
+   VERBINDUNG GETRENNT
+========================================= */
+
+
+function onDisconnected() {
+
+    connectionStatus.textContent =
+        "🔴 Nicht verbunden";
+
+
+    connectionStatus.style.color =
+        "white";
+
+
+    connectButton.disabled =
+        false;
+
+
+    disconnectButton.disabled =
+        true;
+
+
+    applyButton.disabled =
+        true;
+
+
+    message.textContent =
+        "Bluetooth-Verbindung wurde getrennt.";
 
 }
 
 
 
-/* Bluetooth verbinden */
+/* =========================================
+   ÜBERNEHMEN
+========================================= */
 
 
-connectButton.addEventListener(
-"click",
+applyButton.addEventListener(
+    "click",
+    async function() {
 
-async function() {
-
-    try {
-
-        services.innerHTML = "";
-
-
-        setStatus(
-            "🔍 Suche nach Bluetooth-Geräten..."
-        );
+        const speed =
+            speedSlider.value;
 
 
         /*
-         * KEIN Namensfilter.
-         *
-         * Dadurch sollte wieder genau
-         * die Bluetooth-Auswahl erscheinen,
-         * die bei dir vorher funktioniert hat.
-         */
+           Noch kein Schreiben!
 
-        device =
-        await navigator.bluetooth.requestDevice({
-
-            acceptAllDevices: true,
-
-            optionalServices: []
-
-        });
+           Wir zeigen zunächst nur,
+           was ausgewählt wurde.
+        */
 
 
-        setStatus(
+        message.textContent =
+            "✓ " +
+            speed +
+            " km/h ausgewählt.\n\n" +
 
-            "📱 Gerät ausgewählt:\n\n" +
-
-            (
-                device.name ||
-                "Unbekannt"
-            ) +
-
-            "\n\n🔵 Verbinde..."
-
-        );
-
-
-        device.addEventListener(
-
-            "gattserverdisconnected",
-
-            function() {
-
-                setStatus(
-                    "🔴 Bluetooth-Verbindung getrennt."
-                );
-
-                connectButton.disabled =
-                    false;
-
-                disconnectButton.disabled =
-                    true;
-
-            }
-
-        );
-
-
-        if (!device.gatt) {
-
-            throw new Error(
-                "GATT wird von diesem Gerät nicht unterstützt."
-            );
-
-        }
-
-
-        server =
-        await device.gatt.connect();
-
-
-        setStatus(
-
-            "🟢 Verbunden!\n\n" +
-
-            "Gerät: " +
-
-            (
-                device.name ||
-                "Unbekannt"
-            ) +
-
-            "\n\n" +
-
-            "Suche nach BLE-Services..."
-
-        );
+            "Der Wert wurde noch nicht " +
+            "an den Controller gesendet.";
 
 
         /*
-         * Services auslesen.
-         *
-         * Wir schreiben NICHTS.
-         */
-
-        const serviceList =
-        await server.getPrimaryServices();
-
-
-        if (
-            serviceList.length === 0
-        ) {
-
-            setStatus(
-
-                "⚠️ Verbindung funktioniert,\n" +
-                "aber keine Primary Services gefunden."
-
-            );
-
-        }
-
-
-        /*
-         * Services anzeigen
-         */
-
-        for (
-            const service of serviceList
-        ) {
-
-
-            const serviceBox =
-            document.createElement("div");
-
-
-            serviceBox.className =
-            "service";
-
-
-            serviceBox.innerHTML =
-
-                "<strong>BLE Service</strong><br><br>" +
-
-                "<span class='uuid'>" +
-
-                service.uuid +
-
-                "</span>";
-
-
-            services.appendChild(
-                serviceBox
-            );
-
-
-            try {
-
-
-                const characteristics =
-                await service.getCharacteristics();
-
-
-                for (
-                    const characteristic
-                    of characteristics
-                ) {
-
-
-                    const charBox =
-                    document.createElement("div");
-
-
-                    charBox.className =
-                    "characteristic";
-
-
-                    charBox.innerHTML =
-
-                        "<strong>Characteristic</strong><br>" +
-
-                        "<span class='uuid'>" +
-
-                        characteristic.uuid +
-
-                        "</span><br><br>" +
-
-                        "Eigenschaften: " +
-
-                        characteristic.properties.join(", ");
-
-
-                    serviceBox.appendChild(
-                        charBox
-                    );
-
-                }
-
-
-            }
-
-            catch(error) {
-
-
-                const errorBox =
-                document.createElement("div");
-
-
-                errorBox.className =
-                "characteristic";
-
-
-                errorBox.textContent =
-                    "Characteristics konnten nicht gelesen werden.";
-
-
-                serviceBox.appendChild(
-                    errorBox
-                );
-
-            }
-
-        }
-
-
-        connectButton.disabled =
-            true;
-
-
-        disconnectButton.disabled =
-            false;
-
-
-        setStatus(
-
-            "✅ Fertig!\n\n" +
-
-            "Gerät: " +
-
-            (
-                device.name ||
-                "Unbekannt"
-            ) +
-
-            "\n\n" +
-
-            "BLE-Services wurden ausgelesen.\n" +
-
-            "Es wurden keine Daten geschrieben."
-
-        );
+           Hier könnte später die BLE-Kommunikation
+           ergänzt werden, sobald das tatsächliche
+           Protokoll bekannt ist.
+        */
 
     }
+);
 
-
-    catch(error) {
-
-
-        console.error(error);
-
-
-        connectButton.disabled =
-            false;
-
-
-        setStatus(
-
-            "❌ Fehler:\n\n" +
-
-            error.name +
-
-            "\n" +
-
-            error.message
-
-        );
-
-    }
-
-});
-
-
-
-/* Trennen */
-
-
-disconnectButton.addEventListener(
-"click",
-
-function() {
-
-    if (
-
-        device &&
-
-        device.gatt &&
-
-        device.gatt.connected
-
-    ) {
-
-        device.gatt.disconnect();
-
-    }
-
-});
 
 </script>
 
 
 </body>
+
 </html>
