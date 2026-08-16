@@ -1,774 +1,344 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>E-MO M12 Bluetooth</title>
-
+<title>Escooter BLE Scanner</title>
 
 <style>
-
-* {
-    box-sizing: border-box;
-}
-
-
 body {
-
     margin: 0;
-
     min-height: 100vh;
-
     font-family: Arial, sans-serif;
-
     background: #101217;
-
     color: white;
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
 }
-
 
 .container {
-
     width: 92%;
-
-    max-width: 600px;
-
+    max-width: 650px;
     background: #1b1f27;
-
     border-radius: 20px;
-
     padding: 25px;
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,0.5);
-
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
 }
-
 
 h1 {
-
     text-align: center;
-
-    margin: 0;
-
 }
-
-
-.subtitle {
-
-    text-align: center;
-
-    color: #888;
-
-    margin-top: 8px;
-
-    margin-bottom: 25px;
-
-}
-
-
-/* Bluetooth */
-
-.connection {
-
-    background: #11151b;
-
-    padding: 18px;
-
-    border-radius: 15px;
-
-    margin-bottom: 20px;
-
-}
-
-
-.connection-status {
-
-    text-align: center;
-
-    margin-bottom: 12px;
-
-    color: #aaa;
-
-}
-
-
-button {
-
-    width: 100%;
-
-    padding: 14px;
-
-    margin-top: 8px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    background: #287cff;
-
-    color: white;
-
-}
-
-
-button:hover {
-
-    background: #1768e5;
-
-}
-
-
-button:disabled {
-
-    opacity: 0.45;
-
-    cursor: not-allowed;
-
-}
-
-
-.disconnect {
-
-    background: #343943;
-
-}
-
-
-/* Modes */
-
-.modes-title {
-
-    margin-top: 25px;
-
-    margin-bottom: 12px;
-
-    font-size: 20px;
-
-    font-weight: bold;
-
-}
-
-
-.mode {
-
-    background: #11151b;
-
-    border-radius: 15px;
-
-    padding: 18px;
-
-    margin-bottom: 12px;
-
-}
-
-
-.mode-header {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    margin-bottom: 15px;
-
-}
-
-
-.mode-name {
-
-    font-size: 18px;
-
-    font-weight: bold;
-
-}
-
-
-.speed-value {
-
-    font-size: 20px;
-
-    font-weight: bold;
-
-    color: #4d8dff;
-
-}
-
-
-input[type="range"] {
-
-    width: 100%;
-
-}
-
-
-/* Status */
 
 .status {
-
-    margin-top: 20px;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
     background: #11151b;
-
-    color: #aaa;
-
-    line-height: 1.5;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
-
-}
-
-
-.warning {
-
-    margin-top: 20px;
-
     padding: 15px;
-
     border-radius: 12px;
-
-    background: #302712;
-
-    color: #e8d39b;
-
-    font-size: 13px;
-
-    line-height: 1.5;
-
+    margin: 20px 0;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 12px;
+    background: #287cff;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:disabled {
+    opacity: .5;
+}
+
+.service {
+    background: #11151b;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 12px;
+}
+
+.characteristic {
+    padding: 8px 0;
+    color: #bbb;
+    font-size: 14px;
+    border-top: 1px solid #292e36;
+}
+
+.uuid {
+    font-family: monospace;
+    color: #6fa1ff;
+    word-break: break-all;
+}
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+<h1>🛴 Escooter BLE Scanner</h1>
 
-<h1>🛴 E-MO M12</h1>
-
-
-<div class="subtitle">
-
-Bluetooth Control
-
-</div>
-
-
-
-<!-- BLUETOOTH -->
-
-
-<div class="connection">
-
-
-<div
-    class="connection-status"
-    id="connectionStatus">
-
-🔴 Nicht verbunden
-
-</div>
-
-
-<button
-    id="connectButton">
-
-🔵 Bluetooth verbinden
-
+<button id="connect">
+🔵 Escooter verbinden
 </button>
 
-
-<button
-    id="disconnectButton"
-    class="disconnect"
-    disabled>
-
+<button id="disconnect" disabled>
 🔌 Trennen
-
 </button>
 
-
-</div>
-
-
-
-<!-- MODES -->
-
-
-<div class="modes-title">
-
-⚙️ Fahrmodi
-
-</div>
-
-
-
-<div class="mode">
-
-
-<div class="mode-header">
-
-<div class="mode-name">
-
-Mode 1
-
-</div>
-
-
-<div
-    class="speed-value"
-    id="speed1">
-
-10 km/h
-
-</div>
-
-</div>
-
-
-<input
-    type="range"
-    id="mode1"
-    min="1"
-    max="20"
-    value="10">
-
-</div>
-
-
-
-<div class="mode">
-
-
-<div class="mode-header">
-
-<div class="mode-name">
-
-Mode 2
-
-</div>
-
-
-<div
-    class="speed-value"
-    id="speed2">
-
-15 km/h
-
-</div>
-
-</div>
-
-
-<input
-    type="range"
-    id="mode2"
-    min="1"
-    max="20"
-    value="15">
-
-</div>
-
-
-
-<div class="mode">
-
-
-<div class="mode-header">
-
-<div class="mode-name">
-
-Mode 3
-
-</div>
-
-
-<div
-    class="speed-value"
-    id="speed3">
-
-20 km/h
-
-</div>
-
-</div>
-
-
-<input
-    type="range"
-    id="mode3"
-    min="1"
-    max="20"
-    value="20">
-
-</div>
-
-
-
-<!-- STATUS -->
-
-
-<div
-    class="status"
-    id="status">
-
+<div id="status" class="status">
 Bereit.
-
-Drücke „Bluetooth verbinden“,
-um nach Bluetooth-Geräten zu suchen.
-
 </div>
 
-
-<div class="warning">
-
-⚠️ Diese Version liest zunächst nur
-den Bluetooth-Status.
-
-Es werden keine Geschwindigkeitswerte
-oder Controller-Einstellungen geschrieben.
+<div id="services"></div>
 
 </div>
-
-
-</div>
-
 
 
 <script>
 
-
-/* =========================
-   MODE SLIDER
-========================= */
-
-
-document
-.getElementById("mode1")
-.addEventListener("input", function() {
-
-    document
-    .getElementById("speed1")
-    .textContent =
-        this.value + " km/h";
-
-});
-
-
-document
-.getElementById("mode2")
-.addEventListener("input", function() {
-
-    document
-    .getElementById("speed2")
-    .textContent =
-        this.value + " km/h";
-
-});
-
-
-document
-.getElementById("mode3")
-.addEventListener("input", function() {
-
-    document
-    .getElementById("speed3")
-    .textContent =
-        this.value + " km/h";
-
-});
-
-
-
-/* =========================
-   BLUETOOTH
-========================= */
-
-
-let bluetoothDevice = null;
+let device = null;
+let server = null;
 
 
 const connectButton =
-    document.getElementById(
-        "connectButton"
-    );
-
+    document.getElementById("connect");
 
 const disconnectButton =
-    document.getElementById(
-        "disconnectButton"
-    );
-
-
-const connectionStatus =
-    document.getElementById(
-        "connectionStatus"
-    );
-
+    document.getElementById("disconnect");
 
 const status =
-    document.getElementById(
-        "status"
-    );
+    document.getElementById("status");
+
+const services =
+    document.getElementById("services");
 
 
+function log(text) {
 
-/* Browser prüfen */
-
-
-if (!navigator.bluetooth) {
-
-    connectButton.disabled = true;
-
-    status.textContent =
-        "❌ Web Bluetooth wird von diesem Browser nicht unterstützt.\n\n" +
-        "Bitte Chrome auf Android verwenden.";
+    status.textContent = text;
 
 }
 
 
-
-/* Verbinden */
-
-
 connectButton.addEventListener(
     "click",
-    async function() {
-
+    async () => {
 
         try {
 
+            services.innerHTML = "";
 
-            connectButton.disabled = true;
-
-
-            status.textContent =
-                "🔍 Suche nach Bluetooth-Geräten...\n\n" +
-                "Bitte wähle dein Scooter-Gerät aus.";
+            log(
+                "🔍 Suche nach Bluetooth-Geräten..."
+            );
 
 
-            /*
-             * Wir kennen die UUID des M12
-             * momentan noch nicht.
-             *
-             * Deshalb suchen wir zunächst
-             * nach allen Geräten.
-             */
-
-
-            bluetoothDevice =
+            device =
                 await navigator.bluetooth.requestDevice({
 
-                    acceptAllDevices: true,
+                    filters: [
+                        {
+                            name: "Escooter"
+                        }
+                    ],
 
                     optionalServices: []
 
                 });
 
 
-
-            /* Gerät gefunden */
-
-
-            connectionStatus.textContent =
-                "🟡 Gerät gefunden";
-
-
-            status.textContent =
-                "📱 Gerät gefunden:\n\n" +
-
-                (
-                    bluetoothDevice.name ||
-                    "Unbekannt"
-                ) +
-
-                "\n\n🔵 Verbinde...";
-
-
-
-            /* Disconnect Event */
-
-
-            bluetoothDevice.addEventListener(
-                "gattserverdisconnected",
-                disconnected
+            log(
+                "📱 Gefunden:\n" +
+                (device.name || "Unbekannt") +
+                "\n\n🔵 Verbinde..."
             );
 
 
+            device.addEventListener(
+                "gattserverdisconnected",
+                () => {
 
-            /* GATT prüfen */
+                    log(
+                        "🔴 Verbindung getrennt."
+                    );
+
+                    connectButton.disabled =
+                        false;
+
+                    disconnectButton.disabled =
+                        true;
+
+                }
+            );
 
 
-            if (!bluetoothDevice.gatt) {
+            server =
+                await device.gatt.connect();
 
-                throw new Error(
-                    "Dieses Gerät besitzt keine GATT-Schnittstelle."
+
+            log(
+                "🟢 Verbunden!\n\n" +
+                "Suche BLE-Services..."
+            );
+
+
+            /*
+             * Wir holen nur die Services.
+             * Es werden keine Werte geschrieben.
+             */
+
+            const serviceList =
+                await server.getPrimaryServices();
+
+
+            if (serviceList.length === 0) {
+
+                log(
+                    "⚠️ Keine Primary Services gefunden."
                 );
 
-            }
-
-
-
-            /* Verbindung */
-
-
-            const server =
-                await bluetoothDevice.gatt.connect();
-
-
-
-            if (server.connected) {
-
-
-                connectionStatus.textContent =
-                    "🟢 Verbunden";
-
-
-                connectionStatus.style.color =
-                    "#55d66b";
-
-
-                disconnectButton.disabled =
-                    false;
-
-
-                status.textContent =
-
-                    "✅ Bluetooth-Verbindung hergestellt!\n\n" +
-
-                    "Gerät:\n" +
-
-                    (
-                        bluetoothDevice.name ||
-                        "Unbekannt"
-                    ) +
-
-                    "\n\n" +
-
-                    "GATT-Verbindung: OK\n\n" +
-
-                    "Noch werden keine Controller-Daten gelesen.";
+                return;
 
             }
 
+
+            for (
+                const service of serviceList
+            ) {
+
+                const serviceBox =
+                    document.createElement("div");
+
+                serviceBox.className =
+                    "service";
+
+
+                serviceBox.innerHTML =
+                    "<strong>Service</strong><br>" +
+                    "<span class='uuid'>" +
+                    service.uuid +
+                    "</span>";
+
+
+                services.appendChild(
+                    serviceBox
+                );
+
+
+                try {
+
+                    const chars =
+                        await service.getCharacteristics();
+
+
+                    for (
+                        const characteristic
+                        of chars
+                    ) {
+
+                        const charBox =
+                            document.createElement("div");
+
+                        charBox.className =
+                            "characteristic";
+
+
+                        charBox.innerHTML =
+                            "Characteristic:<br>" +
+                            "<span class='uuid'>" +
+                            characteristic.uuid +
+                            "</span><br><br>" +
+                            "Eigenschaften: " +
+                            characteristic.properties
+                            .join(", ");
+
+
+                        serviceBox.appendChild(
+                            charBox
+                        );
+
+                    }
+
+                }
+
+                catch (error) {
+
+                    const errorBox =
+                        document.createElement("div");
+
+                    errorBox.className =
+                        "characteristic";
+
+                    errorBox.textContent =
+                        "Characteristics konnten nicht gelesen werden.";
+
+                    serviceBox.appendChild(
+                        errorBox
+                    );
+
+                }
+
+            }
+
+
+            disconnectButton.disabled =
+                false;
+
+            connectButton.disabled =
+                true;
+
+
+            log(
+                "✅ Fertig!\n\n" +
+                "Die BLE-Struktur wurde ausgelesen.\n" +
+                "Es wurden keine Daten geschrieben."
+            );
 
         }
 
-        catch(error) {
-
+        catch (error) {
 
             console.error(error);
 
+            log(
+                "❌ Fehler:\n\n" +
+                error.message
+            );
 
             connectButton.disabled =
                 false;
 
-
-            connectionStatus.textContent =
-                "🔴 Nicht verbunden";
-
-
-            status.textContent =
-
-                "❌ Bluetooth-Fehler:\n\n" +
-
-                error.message;
-
         }
 
     }
 );
-
-
-
-/* Trennen */
 
 
 disconnectButton.addEventListener(
     "click",
-    function() {
-
+    () => {
 
         if (
-
-            bluetoothDevice &&
-
-            bluetoothDevice.gatt &&
-
-            bluetoothDevice.gatt.connected
-
+            device &&
+            device.gatt &&
+            device.gatt.connected
         ) {
 
-
-            bluetoothDevice.gatt.disconnect();
+            device.gatt.disconnect();
 
         }
 
     }
 );
 
-
-
-/* Verbindung verloren */
-
-
-function disconnected() {
-
-
-    connectionStatus.textContent =
-        "🔴 Nicht verbunden";
-
-
-    connectionStatus.style.color =
-        "white";
-
-
-    connectButton.disabled =
-        false;
-
-
-    disconnectButton.disabled =
-        true;
-
-
-    status.textContent =
-        "🔌 Bluetooth-Verbindung wurde getrennt.";
-
-}
-
-
 </script>
 
-
 </body>
-
 </html>
