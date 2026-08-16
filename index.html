@@ -1,1 +1,730 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>E-MO M12 Control</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      font-family: Arial, sans-serif;
+
+      background: #101217;
+      color: white;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 600px;
+
+      background: #1b1f27;
+
+      border-radius: 20px;
+
+      padding: 25px;
+
+      box-shadow:
+        0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+
+      margin-top: 8px;
+      margin-bottom: 25px;
+    }
+
+
+    /* Verbindung */
+
+    .connection {
+      background: #11151b;
+
+      padding: 15px;
+
+      border-radius: 15px;
+
+      margin-bottom: 20px;
+    }
+
+    .connection-status {
+      text-align: center;
+
+      margin-bottom: 10px;
+
+      color: #aaa;
+    }
+
+
+    button {
+      width: 100%;
+
+      padding: 14px;
+
+      margin-top: 8px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      background: #287cff;
+
+      color: white;
+    }
+
+    button:hover {
+      background: #1768e5;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+
+      cursor: not-allowed;
+    }
+
+    .disconnect {
+      background: #343943;
+    }
+
+
+    /* Modes */
+
+    .modes-title {
+      margin-top: 25px;
+
+      margin-bottom: 12px;
+
+      font-size: 20px;
+
+      font-weight: bold;
+    }
+
+
+    .mode {
+      background: #11151b;
+
+      border-radius: 15px;
+
+      padding: 18px;
+
+      margin-bottom: 12px;
+    }
+
+
+    .mode-header {
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      margin-bottom: 15px;
+    }
+
+
+    .mode-name {
+      font-size: 18px;
+
+      font-weight: bold;
+    }
+
+
+    .speed-value {
+      font-size: 20px;
+
+      font-weight: bold;
+
+      color: #4d8dff;
+    }
+
+
+    input[type="range"] {
+      width: 100%;
+
+      cursor: pointer;
+    }
+
+
+    .range-info {
+      display: flex;
+
+      justify-content: space-between;
+
+      color: #777;
+
+      font-size: 12px;
+
+      margin-top: 6px;
+    }
+
+
+    /* Status */
+
+    .status {
+      margin-top: 20px;
+
+      padding: 15px;
+
+      border-radius: 12px;
+
+      background: #11151b;
+
+      color: #aaa;
+
+      white-space: pre-wrap;
+
+      word-break: break-word;
+    }
+
+
+    .warning {
+      margin-top: 20px;
+
+      padding: 15px;
+
+      border-radius: 12px;
+
+      background: #302712;
+
+      color: #e8d39b;
+
+      font-size: 13px;
+
+      line-height: 1.5;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+  <h1>🛴 E-MO M12</h1>
+
+  <div class="subtitle">
+    Bluetooth Control
+  </div>
+
+
+  <!-- Verbindung -->
+
+  <div class="connection">
+
+    <div
+      class="connection-status"
+      id="connectionStatus"
+    >
+      🔴 Nicht verbunden
+    </div>
+
+
+    <button id="connectButton">
+      🔵 Bluetooth verbinden
+    </button>
+
+
+    <button
+      id="disconnectButton"
+      class="disconnect"
+      disabled
+    >
+      🔌 Trennen
+    </button>
+
+  </div>
+
+
+
+  <!-- Modes -->
+
+  <div class="modes-title">
+    ⚙️ Fahrmodi
+  </div>
+
+
+  <!-- Mode 1 -->
+
+  <div class="mode">
+
+    <div class="mode-header">
+
+      <div class="mode-name">
+        Mode 1
+      </div>
+
+      <div
+        class="speed-value"
+        id="speed1"
+      >
+        10 km/h
+      </div>
+
+    </div>
+
+
+    <input
+      type="range"
+      id="mode1"
+      min="1"
+      max="20"
+      value="10"
+    >
+
+
+    <div class="range-info">
+
+      <span>
+        1 km/h
+      </span>
+
+      <span>
+        20 km/h
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Mode 2 -->
+
+  <div class="mode">
+
+    <div class="mode-header">
+
+      <div class="mode-name">
+        Mode 2
+      </div>
+
+      <div
+        class="speed-value"
+        id="speed2"
+      >
+        15 km/h
+      </div>
+
+    </div>
+
+
+    <input
+      type="range"
+      id="mode2"
+      min="1"
+      max="20"
+      value="15"
+    >
+
+
+    <div class="range-info">
+
+      <span>
+        1 km/h
+      </span>
+
+      <span>
+        20 km/h
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Mode 3 -->
+
+  <div class="mode">
+
+    <div class="mode-header">
+
+      <div class="mode-name">
+        Mode 3
+      </div>
+
+      <div
+        class="speed-value"
+        id="speed3"
+      >
+        20 km/h
+      </div>
+
+    </div>
+
+
+    <input
+      type="range"
+      id="mode3"
+      min="1"
+      max="20"
+      value="20"
+    >
+
+
+    <div class="range-info">
+
+      <span>
+        1 km/h
+      </span>
+
+      <span>
+        20 km/h
+      </span>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- Status -->
+
+  <div
+    class="status"
+    id="status"
+  >
+    Bereit.
+
+    Die Werte werden momentan
+    nur auf dieser Website geändert.
+
+    Es werden noch keine Einstellungen
+    an den Scooter gesendet.
+  </div>
+
+
+  <div class="warning">
+
+    ⚠️ <strong>Hinweis</strong><br><br>
+
+    Die Regler ändern momentan nur die
+    Anzeige der Website.
+
+    Die Bluetooth-Kommunikation mit dem
+    Controller wird erst eingerichtet,
+    wenn wir wissen, welche Services und
+    Characteristics dein M12 verwendet.
+
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+
+/* ============================
+   GESCHWINDIGKEITSREGLER
+   ============================ */
+
+
+const mode1 =
+  document.getElementById("mode1");
+
+const mode2 =
+  document.getElementById("mode2");
+
+const mode3 =
+  document.getElementById("mode3");
+
+
+const speed1 =
+  document.getElementById("speed1");
+
+const speed2 =
+  document.getElementById("speed2");
+
+const speed3 =
+  document.getElementById("speed3");
+
+
+mode1.addEventListener(
+  "input",
+  function() {
+
+    speed1.textContent =
+      mode1.value + " km/h";
+
+  }
+);
+
+
+mode2.addEventListener(
+  "input",
+  function() {
+
+    speed2.textContent =
+      mode2.value + " km/h";
+
+  }
+);
+
+
+mode3.addEventListener(
+  "input",
+  function() {
+
+    speed3.textContent =
+      mode3.value + " km/h";
+
+  }
+);
+
+
+
+/* ============================
+   BLUETOOTH
+   ============================ */
+
+
+let bluetoothDevice = null;
+
+
+const connectButton =
+  document.getElementById(
+    "connectButton"
+  );
+
+
+const disconnectButton =
+  document.getElementById(
+    "disconnectButton"
+  );
+
+
+const connectionStatus =
+  document.getElementById(
+    "connectionStatus"
+  );
+
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+
+
+/*
+   Browser-Unterstützung
+*/
+
+
+if (!navigator.bluetooth) {
+
+  status.textContent =
+    "❌ Web Bluetooth wird von diesem Browser nicht unterstützt.\n\n" +
+
+    "Bitte Google Chrome auf Android verwenden.";
+
+  connectButton.disabled = true;
+
+}
+
+
+
+/*
+   Bluetooth verbinden
+*/
+
+
+connectButton.addEventListener(
+  "click",
+  async function() {
+
+    try {
+
+      connectButton.disabled = true;
+
+
+      status.textContent =
+        "🔍 Suche nach Bluetooth-Geräten...";
+
+
+      bluetoothDevice =
+        await navigator.bluetooth.requestDevice({
+
+          acceptAllDevices: true,
+
+          optionalServices: []
+
+        });
+
+
+      status.textContent =
+        "📱 Gerät gefunden:\n\n" +
+
+        (
+          bluetoothDevice.name ||
+          "Unbekanntes Gerät"
+        ) +
+
+        "\n\n🔵 Verbinde...";
+
+
+      bluetoothDevice.addEventListener(
+        "gattserverdisconnected",
+        onDisconnected
+      );
+
+
+      if (!bluetoothDevice.gatt) {
+
+        throw new Error(
+          "GATT wird von diesem Gerät nicht unterstützt."
+        );
+
+      }
+
+
+      const server =
+        await bluetoothDevice.gatt.connect();
+
+
+      if (server.connected) {
+
+        connectionStatus.textContent =
+          "🟢 Verbunden";
+
+        connectionStatus.style.color =
+          "#55d66b";
+
+
+        disconnectButton.disabled =
+          false;
+
+
+        status.textContent =
+          "✅ Bluetooth-Verbindung hergestellt!\n\n" +
+
+          "Gerät:\n" +
+
+          (
+            bluetoothDevice.name ||
+            "Unbekannt"
+          ) +
+
+          "\n\n" +
+
+          "Die Mode-Werte werden momentan " +
+          "noch nicht an den Scooter übertragen.";
+
+      }
+
+    }
+
+    catch(error) {
+
+      console.error(error);
+
+
+      connectButton.disabled =
+        false;
+
+
+      status.textContent =
+        "❌ Bluetooth-Fehler:\n\n" +
+
+        error.message;
+
+    }
+
+  }
+);
+
+
+
+/*
+   Trennen
+*/
+
+
+disconnectButton.addEventListener(
+  "click",
+  function() {
+
+    if (
+
+      bluetoothDevice &&
+
+      bluetoothDevice.gatt &&
+
+      bluetoothDevice.gatt.connected
+
+    ) {
+
+      bluetoothDevice.gatt.disconnect();
+
+    }
+
+  }
+);
+
+
+
+/*
+   Verbindung verloren
+*/
+
+
+function onDisconnected() {
+
+  connectionStatus.textContent =
+    "🔴 Nicht verbunden";
+
+
+  connectionStatus.style.color =
+    "white";
+
+
+  connectButton.disabled =
+    false;
+
+
+  disconnectButton.disabled =
+    true;
+
+
+  status.textContent =
+    "🔌 Bluetooth-Verbindung wurde getrennt.";
+
+}
+
+
+</script>
+
+
+</body>
+</html>
